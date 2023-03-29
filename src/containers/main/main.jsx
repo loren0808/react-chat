@@ -1,12 +1,15 @@
 /*
-登录路由组件
+主界面
  */
 import React, {Component} from 'react';
-
-export default class Login extends Component {
+import Logo from '../../components/logo/logo'
+export default class Main extends Component {
     render() {
         return (
-            <div>register</div>
+            <div>
+                main
+                <Logo/>
+            </div>
         );
     }
 }

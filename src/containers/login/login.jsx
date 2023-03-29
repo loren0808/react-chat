@@ -1,14 +1,12 @@
 /*
-注册路由组件
+登录路由组件
  */
 import React, {Component} from 'react';
 
-class Register extends Component {
+export default class Login extends Component {
     render() {
         return (
-            <div>register</div>
+            <div>login</div>
         );
     }
 }
-
-export default Register;
