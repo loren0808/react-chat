@@ -72,6 +72,11 @@ const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
+// 配置1
+const lessRegex = /\.less$/;
+const lessModuleRegex = /\.module\.less$/;
+
+
 const hasJsxRuntime = (() => {
   if (process.env.DISABLE_NEW_JSX_TRANSFORM === 'true') {
     return false;
@@ -84,6 +89,9 @@ const hasJsxRuntime = (() => {
     return false;
   }
 })();
+
+
+
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
@@ -419,7 +427,7 @@ module.exports = function (webpackEnv) {
                     },
                   ],
                 ],
-                
+
                 plugins: [
                   isEnvDevelopment &&
                     shouldUseReactRefresh &&
@@ -453,7 +461,7 @@ module.exports = function (webpackEnv) {
                 cacheDirectory: true,
                 // See #6846 for context on why cacheCompression is disabled
                 cacheCompression: false,
-                
+
                 // Babel sourcemaps are needed for debugging into node_modules
                 // code.  Without the options below, debuggers like VSCode
                 // show incorrect code and set breakpoints on the wrong lines.
@@ -504,6 +512,32 @@ module.exports = function (webpackEnv) {
             // Opt-in support for SASS (using .scss or .sass extensions).
             // By default we support SASS Modules with the
             // extensions .module.scss or .module.sass
+              // less配置
+              {
+                  test: lessRegex,
+                  exclude: lessModuleRegex,
+                  use: getStyleLoaders(
+                      {
+                          importLoaders: 2,
+                          sourceMap: isEnvProduction && shouldUseSourceMap,
+                      },
+                      'less-loader'
+                  ),
+                  sideEffects: true,
+              },
+              {
+                  test: lessModuleRegex,
+                  use: getStyleLoaders(
+                      {
+                          importLoaders: 2,
+                          sourceMap: isEnvProduction && shouldUseSourceMap,
+                          modules: {
+                              getLocalIdent: getCSSModuleLocalIdent,
+                          },
+                      },
+                      'less-loader'
+                  ),
+              },
             {
               test: sassRegex,
               exclude: sassModuleRegex,

@@ -7,7 +7,7 @@ import store from "./redux/store";
 import Register from "./containers/register/register";
 import Main from "./containers/main/main";
 import Login from "./containers/login/login";
-
+import "./base.less"
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Provider store={store}>

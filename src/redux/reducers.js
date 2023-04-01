@@ -1,14 +1,19 @@
-import {combineReducers} from 'redux'
+import { combineReducers } from 'redux'
 
-function xxx(state = 0, action) {
-    return state
+const initUser = {
+    username: '',
+    type: '',
+    msg: '',
 }
-function yyy(state = 0, action) {
-    return state
+
+function user(state = initUser, action) {
+    switch(action.type){
+        default:
+            return state
+    }
 }
 
 export default combineReducers({
-    xxx,
-    yyy
+    user
 })
 

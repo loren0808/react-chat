@@ -1,15 +1,21 @@
 /*
 主界面
  */
-import React, {Component} from 'react';
-import Logo from '../../components/logo/logo'
-export default class Main extends Component {
-    render() {
-        return (
-            <div>
-                main
-                <Logo/>
-            </div>
-        );
+import React, { Component, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+export default function Main() {
+
+  const navigate = useNavigate()
+  useEffect(() => {
+    //直接跳转
+    navigate("/login")
+    return () => {
+
     }
+  }, [])
+
+  return (
+    <div>Main</div>
+  )
 }
