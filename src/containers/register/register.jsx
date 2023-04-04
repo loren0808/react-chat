@@ -1,8 +1,10 @@
 /*
 注册路由组件
  */
-import React, { useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from "react-router-dom"
+import { connect } from 'react-redux'
+import { register } from '../../redux/actions'
 import Logo from '../../components/logo/logo'
 import {
     NavBar,
@@ -10,21 +12,33 @@ import {
     Input,
     Radio,
     Button,
-    Space
+    Space,
+    Dialog
 } from 'antd-mobile'
-export function Register() {
-
+function Register({user,register}) {
     // const [val,setVal] = useState(0)
-
     const [form] = Form.useForm()
     const navigate = useNavigate()
-    const onSubmit = () => {
-        console.log(form.getFieldsValue())
+    useEffect(() => {
+        if (user.msg) {
+            Dialog.alert({ content: user.msg });
+        }
+    }, [user]);
+    const onSubmit = async () => {
+        try {
+            //表单验证
+            const res = await form.validateFields()
+            const { username, password, type } = res
+            register({ username, password, type })
+            // console.log(res)
+        } catch (err) {
+            console.log(err)
+        }
     }
     const toLogin = () => {
         navigate("/login")
     }
-
+    //type Rule = RuleConfig | ((form: FormInstance) => RuleConfig);
     return (
         <>
             <NavBar back={null} className="my-navbar">CHAT</NavBar>
@@ -42,20 +56,36 @@ export function Register() {
                     </>
                 }
             >
-                <Form.Item label='用户名' name='username'>
+                <Form.Item label='用户名' name='username'
+                    rules={[{ required: true, message: '用户名不能为空' }]}
+                >
                     <Input placeholder='请输入用户名' clearable />
                 </Form.Item>
-                <Form.Item label='密码' name='password'>
+                <Form.Item label='密码' name='password'
+                    rules={[{ required: true, message: '密码不能为空' }]}
+                >
                     <Input placeholder='请输入密码' clearable type='password' />
                 </Form.Item>
-                <Form.Item label='确认密码' name='passwordDup'>
+                <Form.Item label='确认密码' name='passwordDup' rules={[
+                    ({ getFieldValue }) => ({
+                        validator(rule, value) {
+                            if (!value || getFieldValue('password') === value) {
+                                return Promise.resolve()
+                            }
+                            return Promise.reject("两次密码输入不一致")
+                        }
+                    }),{ required: true, message: '确认密码不能为空' }
+                ]}
+                >
                     <Input placeholder='请再次输入密码' clearable type='password' />
                 </Form.Item>
-                <Form.Item label='用户类型' name='type'>
+                <Form.Item label='用户类型' name='type'
+                    rules={[{ required: true, message: '用户类型不能为空' }]}
+                >
                     <Radio.Group>
                         <Space direction='horizontal'>
-                            <Radio value='dashen'>大神</Radio>
-                            <Radio value='laoban'>老板</Radio>
+                            <Radio value='Expert'>大神</Radio>
+                            <Radio value='Boss'>老板</Radio>
                         </Space>
                     </Radio.Group>
                 </Form.Item>
@@ -63,3 +93,8 @@ export function Register() {
         </>
     );
 }
+
+export default connect(
+    state => ({ user: state.user }),
+    { register }
+)(Register)

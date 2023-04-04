@@ -1,10 +1,11 @@
 /*
 登录路由组件
  */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import ajax from '../../api/ajax';
 import Logo from '../../components/logo/logo'
+import { login } from '../../redux/actions';
+import { connect } from 'react-redux';
 import {
     NavBar,
     Form,
@@ -12,17 +13,33 @@ import {
     Button,
 } from 'antd-mobile'
 
-export default function Login() {
+function Login({ user, login }) {
 
     // const [val,setVal] = useState(0)
+    // 第一次加载
+    const [isMounted, setIsMounted] = useState(false);
 
     const [form] = Form.useForm()
     const navigate = useNavigate()
-    const onSubmit = () => {
-        const data = form.getFieldValue()
-        ajax('/login', data, 'get').then(res => {
-            console.log(res)
-        })
+    useEffect(() => {
+        if (isMounted) {
+            console.log(isMounted)
+            if (user.redirectTo) {
+                navigate(user.redirectTo)
+            }
+        } else {
+            setIsMounted(true);
+        }
+    }, [user.redirectTo])
+    const onSubmit = async () => {
+        try {
+            //表单验证
+            const res = await form.validateFields()
+            login(res)
+            // console.log(res)
+        } catch (err) {
+            console.log(err)
+        }
     }
     const toRegister = () => {
         navigate("/Register")
@@ -45,13 +62,21 @@ export default function Login() {
                     </>
                 }
             >
-                <Form.Item label='用户名' name='username'>
+                <Form.Item label='用户名' name='username'
+                    rules={[{ required: true, message: '用户名不能为空' }]}
+                >
                     <Input placeholder='请输入用户名' clearable />
                 </Form.Item>
-                <Form.Item label='密码' name='password'>
+                <Form.Item label='密码' name='password'
+                    rules={[{ required: true, message: '密码不能为空' }]}
+                >
                     <Input placeholder='请输入密码' clearable type='password' />
                 </Form.Item>
             </Form>
         </>
     );
 }
+export default connect(
+    state => ({ user: state.user }),
+    { login }
+)(Login)
