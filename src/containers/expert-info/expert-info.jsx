@@ -1,20 +1,35 @@
-import {React ,useState} from 'react'
+import { React, useState } from 'react'
 import { connect } from 'react-redux'
-import { Form, Input, TextArea,NavBar,Button } from 'antd-mobile'
+import { Form, Input, TextArea, NavBar, Button } from 'antd-mobile'
+import { updateUser } from '../../redux/actions'
+import { useNavigate } from "react-router-dom";
+import { useDidMountEffect } from '../../utils';
 import HeaderSelector from '../../components/header-selector/header-selector'
 
-function ExpertInfo(props) {
+function ExpertInfo({ user, updateUser }) {
 
   const [form] = Form.useForm()
-
-  const [header,setHeader] = useState({
-    header:''
+  const navigate = useNavigate()
+  const [header, setHeader] = useState({
+    header: ''
   })
 
-  // const setHeader = (header) => { second }
-
-  const onSubmit = () =>{
-    console.log(header)
+  useDidMountEffect(() => {
+    if (user.header) {
+      // ${user.type}
+      navigate(`/`)
+    }
+  }, [user])
+  const onSubmit = async () => {
+    try {
+      const res = await form.validateFields()
+      if (header) {
+        const data = { ...res, ...header }
+        updateUser(data)
+      }
+    } catch (err) {
+      console.log(err)
+    }
   }
   return (
     <>
@@ -30,10 +45,10 @@ function ExpertInfo(props) {
           </>
         }
       >
-        <Form.Item label='求职岗位' name='username'>
+        <Form.Item label='求职岗位' name='post'>
           <Input placeholder='请输入求职岗位' clearable />
         </Form.Item>
-        <Form.Item label='个人介绍' name='type'>
+        <Form.Item label='个人介绍' name='info'>
           <TextArea
             placeholder='请输入个人介绍'
             rows={5}
@@ -46,6 +61,6 @@ function ExpertInfo(props) {
 
 
 export default connect(
-  state => ({}),
-  {}
+  state => ({ user: state.user }),
+  { updateUser }
 )(ExpertInfo)

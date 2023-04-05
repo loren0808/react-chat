@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-
 import { Provider } from 'react-redux'
 import store from "./redux/store"
 import Register from "./containers/register/register"
@@ -17,9 +16,11 @@ root.render(
             <Routes>
                 <Route path='/register' element={<Register />}></Route>
                 <Route path='/login' element={<Login />}></Route>
-                <Route path='/bossinfo' element={<BossInfo />}></Route>
-                <Route path='/expertinfo' element={<ExpertInfo />}></Route>
-                <Route path='/' element={<Main />}></Route>
+                {/* 根路径下的子路由 */}
+                <Route path='/' element={<Main />}>
+                    <Route path='bossinfo' element={<BossInfo />}></Route>
+                    <Route path='expertinfo' element={<ExpertInfo />}></Route>
+                </Route>
             </Routes>
         </BrowserRouter>
     </Provider>

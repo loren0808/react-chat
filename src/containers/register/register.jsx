@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom"
 import { connect } from 'react-redux'
 import { register } from '../../redux/actions'
+import { useDidMountEffect } from '../../utils'
 import Logo from '../../components/logo/logo'
 import {
     NavBar,
@@ -15,13 +16,16 @@ import {
     Space,
     Dialog
 } from 'antd-mobile'
-function Register({user,register}) {
+function Register({ user, register }) {
     // const [val,setVal] = useState(0)
     const [form] = Form.useForm()
     const navigate = useNavigate()
-    useEffect(() => {
+    useDidMountEffect(() => {
         if (user.msg) {
             Dialog.alert({ content: user.msg });
+        }
+        if (user.redirectTo) {
+            navigate(user.redirectTo)
         }
     }, [user]);
     const onSubmit = async () => {
@@ -74,7 +78,7 @@ function Register({user,register}) {
                             }
                             return Promise.reject("两次密码输入不一致")
                         }
-                    }),{ required: true, message: '确认密码不能为空' }
+                    }), { required: true, message: '确认密码不能为空' }
                 ]}
                 >
                     <Input placeholder='请再次输入密码' clearable type='password' />
@@ -84,8 +88,8 @@ function Register({user,register}) {
                 >
                     <Radio.Group>
                         <Space direction='horizontal'>
-                            <Radio value='Expert'>大神</Radio>
-                            <Radio value='Boss'>老板</Radio>
+                            <Radio value='expert'>大神</Radio>
+                            <Radio value='boss'>老板</Radio>
                         </Space>
                     </Radio.Group>
                 </Form.Item>

@@ -1,17 +1,36 @@
-import {React ,useState} from 'react'
+import { React, useState } from 'react'
 import { connect } from 'react-redux'
-import { Form, Input, TextArea,NavBar,Button } from 'antd-mobile'
+import { Form, Input, TextArea, NavBar, Button } from 'antd-mobile'
+import { updateUser } from '../../redux/actions'
+import { useNavigate } from "react-router-dom";
+import { useDidMountEffect } from '../../utils';
 import HeaderSelector from '../../components/header-selector/header-selector'
 
 
-function BossInfo(props) {
+function BossInfo({ user, updateUser }) {
 
   const [form] = Form.useForm()
-  const [header,setHeader] = useState({
-    header:''
+  const navigate = useNavigate()
+  const [header, setHeader] = useState({
+    header: ''
   })
-  const onSubmit = () =>{
-    
+
+  useDidMountEffect(() => {
+    if (user.header) {
+      // ${user.type}
+      navigate(`/`)
+    }
+  }, [user])
+  const onSubmit = async () => {
+    try {
+      const res = await form.validateFields()
+      if (header.header) {
+        const data = { ...res, ...header }
+        updateUser(data)
+      }
+    } catch (err) {
+      console.log(err)
+    }
   }
 
 
@@ -20,37 +39,37 @@ function BossInfo(props) {
       <NavBar back={null} className="my-navbar">老板信息完善</NavBar>
       <HeaderSelector setHeader={setHeader}></HeaderSelector>
       <Form layout='horizontal'
-                form={form}
-                footer={
-                    <>
-                        <Button block onClick={onSubmit} type='submit' color='primary' size='large'>
-                            保存
-                        </Button>
-                    </>
-                }
-            >
-                <Form.Item label='招聘职位' name='post'>
-                    <Input placeholder='请输入招聘职位' clearable />
-                </Form.Item>
-                <Form.Item label='公司名称' name='company'>
-                    <Input placeholder='请输入公司名称' clearable />
-                </Form.Item>
-                <Form.Item label='职位薪资' name='salary'>
-                    <Input placeholder='请输入职位薪资' clearable />
-                </Form.Item>
-                <Form.Item label='职位要求' name='info'>
-                    <TextArea
-                      placeholder='请输入职位要求'
-                      rows={5}
-                    />
-                </Form.Item>
-            </Form>
+        form={form}
+        footer={
+          <>
+            <Button block onClick={onSubmit} type='submit' color='primary' size='large'>
+              保存
+            </Button>
+          </>
+        }
+      >
+        <Form.Item label='招聘职位' name='post'>
+          <Input placeholder='请输入招聘职位' clearable />
+        </Form.Item>
+        <Form.Item label='公司名称' name='company'>
+          <Input placeholder='请输入公司名称' clearable />
+        </Form.Item>
+        <Form.Item label='职位薪资' name='salary'>
+          <Input placeholder='请输入职位薪资' clearable />
+        </Form.Item>
+        <Form.Item label='职位要求' name='info'>
+          <TextArea
+            placeholder='请输入职位要求'
+            rows={5}
+          />
+        </Form.Item>
+      </Form>
     </>
   )
 }
 
 
 export default connect(
-  state => ({}),
-  {}
+  state => ({ user: state.user }),
+  { updateUser }
 )(BossInfo)

@@ -1,36 +1,34 @@
 /*
 登录路由组件
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import Logo from '../../components/logo/logo'
 import { login } from '../../redux/actions';
 import { connect } from 'react-redux';
+import { useDidMountEffect } from '../../utils';
 import {
     NavBar,
     Form,
     Input,
     Button,
+    Dialog
 } from 'antd-mobile'
 
 function Login({ user, login }) {
 
     // const [val,setVal] = useState(0)
     // 第一次加载
-    const [isMounted, setIsMounted] = useState(false);
-
     const [form] = Form.useForm()
     const navigate = useNavigate()
-    useEffect(() => {
-        if (isMounted) {
-            console.log(isMounted)
-            if (user.redirectTo) {
-                navigate(user.redirectTo)
-            }
-        } else {
-            setIsMounted(true);
+    useDidMountEffect(() => {
+        if (user.redirectTo) {
+            navigate(user.redirectTo)
         }
-    }, [user.redirectTo])
+        if (user.msg) {
+            Dialog.alert({ content: user.msg });
+        }
+    }, [user])
     const onSubmit = async () => {
         try {
             //表单验证
