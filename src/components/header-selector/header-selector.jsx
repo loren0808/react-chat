@@ -6,7 +6,7 @@ export default function HeaderSelector({ setHeader }) {
 
     const [icon, setIcon] = useState(0)
     const [list, setList] = useState([])
-    const imageContext = require.context('./images', true, /\.(jpg|png)$/)
+    const imageContext = require.context('../../assets/images', true, /\.(jpg|png)$/)
     useEffect(() => {
         imageContext.keys().forEach((key) => {
             const str = key.match(/\d+/)

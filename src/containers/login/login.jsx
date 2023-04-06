@@ -1,5 +1,5 @@
-/*
-登录路由组件
+/**
+ * 登录路由组件
  */
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";

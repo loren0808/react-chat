@@ -9,7 +9,7 @@ import {
 const authSuccess = (user) => ({ type: AUTH_SUCCESS, data: user })
 const errorMsg = (msg) => ({ type: ERROR_MSG, data: msg })
 const receiveUser = (user) => ({ type: RECEIVE_USER, data: user })
-const resetUser = (msg) => ({ type: RESET_USER, data: msg })
+export const resetUser = (msg) => ({ type: RESET_USER, data: msg })
 
 export const register = (user) => {
     return async dispatch => {
@@ -25,7 +25,6 @@ export const register = (user) => {
 
 export const login = (user) => {
     return async dispatch => {
-        debugger
         const response = await reqLogin(user)
         const result = response.data
         if (result.code === 0) {

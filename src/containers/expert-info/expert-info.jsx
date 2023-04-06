@@ -1,3 +1,6 @@
+/**
+ * 牛人信息完善路由组件
+ */
 import { React, useState } from 'react'
 import { connect } from 'react-redux'
 import { Form, Input, TextArea, NavBar, Button } from 'antd-mobile'
@@ -16,7 +19,6 @@ function ExpertInfo({ user, updateUser }) {
 
   useDidMountEffect(() => {
     if (user.header) {
-      // ${user.type}
       navigate(`/`)
     }
   }, [user])

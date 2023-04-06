@@ -1,3 +1,6 @@
+/**
+ * 老板信息完善路由组件
+ */
 import { React, useState } from 'react'
 import { connect } from 'react-redux'
 import { Form, Input, TextArea, NavBar, Button } from 'antd-mobile'
@@ -17,8 +20,7 @@ function BossInfo({ user, updateUser }) {
 
   useDidMountEffect(() => {
     if (user.header) {
-      // ${user.type}
-      navigate(`/`)
+      navigate('/')
     }
   }, [user])
   const onSubmit = async () => {
