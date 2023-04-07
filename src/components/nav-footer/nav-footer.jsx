@@ -11,7 +11,6 @@ function NavFooter({ navList }) {
     const location = useLocation()
     const navigate = useNavigate()
     const { pathname } = location
-    console.log(pathname)
     const setRouteActive = (value) => {
         navigate(value)
     }

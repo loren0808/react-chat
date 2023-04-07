@@ -1,6 +1,7 @@
 body {
   margin: 0;
   padding: 0;
+  background-color: #f5f4f9;
 }
 
 .my-navbar {
@@ -10,20 +11,23 @@ body {
 
 .main {
   // position: relative;
-  // height: 100vh;
   // display: flex;
   // flex-direction: column;
 }
 
 .body {
+  margin: 6vh 0 6vh 0;
+  padding: 1vh;
   font-size: 50px;
+
   // position: absolute;
 }
 
 .top {
-  // position: fixed;
-  // top: 0;
-  // width: 100%;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
   // flex: 0;
   // border-bottom: solid 1px var(--adm-color-border);
 }
@@ -40,16 +44,42 @@ body {
   margin-top: 4vh;
 
   font-size: 2vh;
-  .image{
+
+  .image {
     text-align: center;
     margin-bottom: 4vh;
   }
-  .name{
+
+  .name {
     text-align: center;
     font-size: 2.5vh;
   }
-  .details{
+
+  .details {
     margin-top: 5vh;
     padding: 1vh;
   }
+}
+
+.user-card-title {
+  display: flex;
+  align-items: center;
+  font-size: 2vh;
+  span {
+    position: absolute;
+    right: 0;
+  }
+}
+.user-card-body{
+  font-size: 2vh;
+}
+.chat-input{
+  padding: 20px;
+}
+
+.extraPart {
+  border-left: solid 1px #eeeeee;
+  padding-left: 12px;
+  font-size: 17px;
+  line-height: 22px;
 }

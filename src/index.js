@@ -5,6 +5,10 @@ import { Provider } from 'react-redux'
 import store from "./redux/store"
 import "./assets/css/base.less"
 import App from './App'
+
+// socketio test
+// import './test/socketio_test'
+
 const root = ReactDOM.createRoot(document.getElementById('root'))
 // const element = useRoutes(routes)
 root.render(

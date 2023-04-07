@@ -1,18 +1,28 @@
 /**
  * 牛人主界面路由组件
  */
-import React from 'react'
+import { React, useEffect } from 'react'
 import { connect } from 'react-redux'
+import { getUserList } from '../../redux/actions'
+import UserList from '../../components/user-list/user-list'
+function Expert({ getUserList, userList }) {
 
-function Expert(props) {
-    
+    useEffect(() => {
+        if (userList.length == 0) {
+            getUserList('expert')
+        }
+    }, [])
+
     return (
-        <div>Expert</div>
+        <>
+            <UserList userList={userList}></UserList>
+        </>
+
     )
 }
 
 
 export default connect(
-    state => ({}),
-    {}
+    state => ({ userList: state.userList }),
+    { getUserList }
 )(Expert)

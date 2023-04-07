@@ -8,6 +8,7 @@ import Expert from './expert/expert'
 import NotFound from '../components/not-found/not-found'
 import Personal from './personal/personal'
 import Message from './message/message'
+import Chat from './chat/chat'
 
 export const routes = [
     {
@@ -17,6 +18,10 @@ export const routes = [
     {
         path: "/register",
         element: <Register />,
+    },
+    {
+        path: "chat/:userid",
+        element: <Chat />,
     },
     {
         path: "/",
