@@ -5,10 +5,10 @@ import { React, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { getUserList } from '../../redux/actions'
 import UserList from '../../components/user-list/user-list'
-function Boss({ getUserList, userList }) {
+function Boss({ getUserList, userList, user }) {
 
     useEffect(() => {
-        if (userList.length == 0) {
+        if(userList.length === 0){
             getUserList('expert')
         }
     }, [])
@@ -23,6 +23,6 @@ function Boss({ getUserList, userList }) {
 
 
 export default connect(
-    state => ({ userList: state.userList }),
+    state => ({ userList: state.userList, user: state.user }),
     { getUserList }
 )(Boss)

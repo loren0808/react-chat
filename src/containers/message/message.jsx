@@ -1,10 +1,14 @@
 /**
  * 聊天路由组件
  */
-import React from 'react'
+import { React, useEffect } from 'react'
 import { connect } from 'react-redux'
 
 function Message(props) {
+
+    useEffect(() => {
+
+    }, [])
 
     return (
         <>
@@ -15,16 +19,16 @@ function Message(props) {
             <div>Message</div>
             <div>Message</div>
             <div>Message</div>
-            <div>Message</div><div>Message</div>
             <div>Message</div>
             <div>Message</div>
-            <div>Message</div><div>Message</div>
             <div>Message</div>
             <div>Message</div>
-            <div>Message</div><div>Message</div>
             <div>Message</div>
             <div>Message</div>
-            <div>Message</div><div>Message</div>
+            <div>Message</div>
+            <div>Message</div>
+            <div>Message</div>
+            <div>Message</div>
             <div>Message</div>
             <div>Message</div>
             <div>Message</div><div>Message</div>

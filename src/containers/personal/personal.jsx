@@ -3,13 +3,13 @@
  */
 import { React, useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { resetUser } from '../../redux/actions'
+import { resetUser, resetUserList } from '../../redux/actions'
 import Cookies from 'js-cookie'
 import {
     Button,
     Dialog,
 } from 'antd-mobile'
-function Personal({ user, resetUser }) {
+function Personal({ user, resetUser, resetUserList }) {
 
     const [icon, setIcon] = useState({})
     const imageContext = require.context('../../assets/images', true, /\.(jpg|png)$/)
@@ -33,6 +33,7 @@ function Personal({ user, resetUser }) {
             onConfirm: () => {
                 Cookies.remove('userid')
                 resetUser()
+                resetUserList()
             },
         })
     }
@@ -58,5 +59,5 @@ function Personal({ user, resetUser }) {
 
 export default connect(
     state => ({ user: state.user }),
-    { resetUser }
+    { resetUser, resetUserList }
 )(Personal)

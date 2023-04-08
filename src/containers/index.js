@@ -19,10 +19,7 @@ export const routes = [
         path: "/register",
         element: <Register />,
     },
-    {
-        path: "chat/:userid",
-        element: <Chat />,
-    },
+
     {
         path: "/",
         element: <Main />,
@@ -50,6 +47,11 @@ export const routes = [
             {
                 path: "message",
                 element: <Message />,
+
+            },
+            {
+                path: "chat/:userid",
+                element: <Chat />,
             },
             {
                 path: "*",

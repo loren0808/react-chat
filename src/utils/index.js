@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef,createContext } from 'react';
 
 
 //自定义hook
@@ -16,14 +16,16 @@ export function useDidMountEffect(callback, deps) {
 
 
 export function getRedirectTo(type, header) {
-    let path
-    if (type === 'boss') {
-        path = '/boss'
-    } else {
-        path = '/expert'
-    }
-    if (!header) {
-        path += 'info'
-    }
-    return path
+  let path
+  if (type === 'boss') {
+    path = '/boss'
+  } else {
+    path = '/expert'
+  }
+  if (!header) {
+    path += 'info'
+  }
+  return path
 }
+
+export const MainContext = createContext()
