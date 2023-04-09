@@ -9,6 +9,7 @@ import {
     RECEIVE_MSG_LIST,
     RECEIVE_MSG,
     RESET_USER_LIST,
+    READ_MSG,
 } from './action-types'
 
 
@@ -58,19 +59,34 @@ const initChat = {
 function chat(state = initChat, action) {
     switch (action.type) {
         case RECEIVE_MSG_LIST:
-            const { users, chatMsgs } = action.data
+            const { users, chatMsgs, userid } = action.data
             return {
                 users,
                 chatMsgs,
-                unReadCount: 0,
+                unReadCount: chatMsgs.reduce((preCount, msg) => {
+                    return preCount + (!msg.read && msg.to === userid ? 1 : 0)
+                }, 0),
             }
         case RECEIVE_MSG:
-            const chatMsg = action.data
-            console.log(chatMsg)
+            const { chatMsg, isToMe } = action.data
             return {
                 users: state.users,
                 chatMsgs: [...state.chatMsgs, chatMsg],
-                unReadCount: 0,
+                unReadCount: state.unReadCount + (isToMe ? 1 : 0),
+            }
+        case READ_MSG:
+            const { count, from, to } = action.data
+
+            return {
+                users: state.users,
+                chatMsgs: state.chatMsgs.map(msg => {
+                    if (!msg.read && msg.from === from && msg.to === to) {
+                        return { ...msg, read: true }
+                    } else {
+                        return msg
+                    }
+                }),
+                unReadCount: state.unReadCount - count
             }
         default:
             return state

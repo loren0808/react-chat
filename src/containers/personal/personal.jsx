@@ -9,22 +9,12 @@ import {
     Button,
     Dialog,
 } from 'antd-mobile'
+import { images } from '../../utils'
 function Personal({ user, resetUser, resetUserList }) {
 
     const [icon, setIcon] = useState({})
-    const imageContext = require.context('../../assets/images', true, /\.(jpg|png)$/)
     useEffect(() => {
-        const list = []
-        imageContext.keys().forEach((key) => {
-            const str = key.match(/\d+/)
-            list.push({
-                key,
-                text: '头像' + str,
-                index: parseInt(str),
-                image: imageContext(key)
-            })
-        })
-        setIcon(list.find(item => item.text === user.header))
+        setIcon(images[user.header])
     }, [])
 
     const logout = () => {
@@ -40,7 +30,7 @@ function Personal({ user, resetUser, resetUserList }) {
     return (
         <div className='personal'>
             <div className='image'>
-                {icon ? <img src={icon.image} /> : null}
+                {icon ? <img src={icon} /> : null}
             </div>
             <div className='name'>
                 {user.username}

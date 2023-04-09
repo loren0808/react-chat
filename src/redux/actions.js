@@ -5,7 +5,7 @@ import {
     reqUser,
     reqUserList,
     reqChatMsgList,
-    reqReadMsg
+    reqReadMsg,
 } from '../api/index'
 import {
     AUTH_SUCCESS,
@@ -16,6 +16,7 @@ import {
     RECEIVE_USER_LIST,
     RECEIVE_MSG_LIST,
     RECEIVE_MSG,
+    READ_MSG,
 } from './action-types'
 import { io } from 'socket.io-client'
 
@@ -34,7 +35,8 @@ const initIO = (() => {
             socket_single = io()
             socket_single.on('receiveMsg', chatMsg => {
                 console.log('客户端收到消息', chatMsg)
-                dispatch(receiveMsg(chatMsg))
+                const isToMe = chatMsg.to === myId
+                dispatch(receiveMsg(chatMsg, isToMe))
             })
             socket_single.emit('login', myId)
         }
@@ -51,6 +53,15 @@ export const sendMsg = ({ from, to, content }) => {
     }
 }
 
+export const readMsg = (from, to) => {
+    return async dispatch => {
+        const response = await reqReadMsg(from)
+        const result = response.data
+        if (result.code === 0) {
+            dispatch(readMsgSyn({ count: result.data, from, to }))
+        }
+    }
+}
 
 
 
@@ -62,9 +73,9 @@ const receiveUser = (user) => ({ type: RECEIVE_USER, data: user })
 export const resetUser = (msg) => ({ type: RESET_USER, data: msg })
 export const resetUserList = (msg) => ({ type: RESET_USER_LIST, data: msg })
 const receiveUserList = (userlist) => ({ type: RECEIVE_USER_LIST, data: userlist })
-const receiveMsgList = ({ users, chatMsgs }) => ({ type: RECEIVE_MSG_LIST, data: { users, chatMsgs } })
-const receiveMsg = (chatMsg) => ({ type: RECEIVE_MSG, data: chatMsg })
-
+const receiveMsgList = ({ users, chatMsgs, userid }) => ({ type: RECEIVE_MSG_LIST, data: { users, chatMsgs, userid } })
+const receiveMsg = (chatMsg, isToMe) => ({ type: RECEIVE_MSG, data: { chatMsg, isToMe } })
+const readMsgSyn = ({ count, from, to }) => ({ type: READ_MSG, data: { count, from, to } })
 
 // 获取用户消息列表的异步函数
 async function getMsgList(dispatch, myId) {
@@ -75,7 +86,7 @@ async function getMsgList(dispatch, myId) {
     const result = response.data
     if (result.code === 0) {
         const { users, chatMsgs } = result.data
-        dispatch(receiveMsgList({ users, chatMsgs }))
+        dispatch(receiveMsgList({ users, chatMsgs, userid: myId }))
     }
 }
 

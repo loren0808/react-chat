@@ -2,21 +2,12 @@ import { React, useEffect, useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 import { Card, Space } from 'antd-mobile'
 import { useNavigate } from 'react-router-dom'
-import { MainContext } from '../../utils'
+import { MainContext ,images} from '../../utils'
 
 function UserList({ userList }) {
-    const imageContext = require.context('../../assets/images', true, /\.(jpg|png)$/)
-    const [images, setImages] = useState({})
     const navigate = useNavigate()
     const context = useContext(MainContext)
-    useEffect(() => {
 
-        imageContext.keys().forEach((key) => {
-            const str = '头像' + key.match(/\d+/)
-            images[str] = imageContext(key)
-        })
-        setImages({ ...images })
-    }, [])
     return (
         <>
             <Space direction='vertical' block>

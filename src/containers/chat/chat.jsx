@@ -1,6 +1,6 @@
 import { React, useState, useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
-import { useLocation, useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import {
     NavBar,
     List,
@@ -9,11 +9,10 @@ import {
     Grid,
 
 } from 'antd-mobile'
-import { sendMsg, getUser } from '../../redux/actions'
-function Chat({ user, sendMsg, chat }) {
+import { sendMsg, readMsg } from '../../redux/actions'
+import { images } from '../../utils'
+function Chat({ user, sendMsg, chat, readMsg }) {
 
-    const imageContext = require.context('../../assets/images', true, /\.(jpg|png)$/)
-    const [images, setImages] = useState({})
     const formRef = useRef(null)
     // 消息内容
     const [value, setValue] = useState('')
@@ -32,12 +31,7 @@ function Chat({ user, sendMsg, chat }) {
         '💀', '💀', '💀', '💀', '💀', '💀', '💀', '💀',
     ]
     useEffect(() => {
-        // chat页面刷新后
-        imageContext.keys().forEach((key) => {
-            const str = '头像' + key.match(/\d+/)
-            images[str] = imageContext(key)
-        })
-        setImages({ ...images })
+        return () => { readMsg(userid, user._id) }
     }, [])
 
     useEffect(() => {
@@ -46,11 +40,15 @@ function Chat({ user, sendMsg, chat }) {
         // 过滤当前聊天信息
         const msgs = chatMsgs.filter(msg => msg.chat_id === chatId)
         setMessages(msgs)
-        window.scrollTo(0, document.documentElement.scrollHeight)
+
     }, [chat])
 
+    useEffect(() => {
+        // 页面信息发生变化后滑到底部
+        window.scrollTo(0, document.documentElement.scrollHeight)
+    }, [messages])
 
-
+    // 点击发送按钮
     const submit = () => {
         const from = user._id
         const to = userid
@@ -66,7 +64,10 @@ function Chat({ user, sendMsg, chat }) {
 
     return (
         <>
-            <NavBar onBack={() => { navigate(-1) }} className="my-navbar top">{chat.users[userid] && chat.users[userid].username}</NavBar>
+            <NavBar onBack={() => {
+
+                navigate(-1)
+            }} className="my-navbar top">{chat.users[userid] && chat.users[userid].username}</NavBar>
             <List className='body'>
                 {
                     messages.map(msg => (
@@ -105,7 +106,6 @@ function Chat({ user, sendMsg, chat }) {
                 </Form>
             </div>
 
-
             {
                 isshow &&
                 <Grid columns={8} gap={8} className='bottom'>
@@ -122,12 +122,9 @@ function Chat({ user, sendMsg, chat }) {
                 </Grid>
             }
         </>
-
-
     )
 }
-
 export default connect(
     (state) => ({ user: state.user, chat: state.chat }),
-    { sendMsg, }
+    { sendMsg, readMsg }
 )(Chat)

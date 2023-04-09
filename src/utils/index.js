@@ -1,4 +1,4 @@
-import { useEffect, useRef,createContext } from 'react';
+import { useEffect, useRef, createContext } from 'react';
 
 
 //自定义hook
@@ -29,3 +29,13 @@ export function getRedirectTo(type, header) {
 }
 
 export const MainContext = createContext()
+
+// 头像资源
+const imageContext = require.context('../assets/images', true, /\.(jpg|png)$/)
+export const images = {}
+imageContext.keys().forEach((key) => {
+  console.log('first')
+  const str = '头像' + key.match(/\d+/)
+  images[str] = imageContext(key)
+})
+

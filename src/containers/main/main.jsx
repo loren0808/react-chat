@@ -16,7 +16,7 @@ import {
 } from 'antd-mobile-icons'
 
 
-function Main({ user, getUser }) {
+function Main({ user, getUser, unReadCount }) {
   const [nav, setNav] = useState(null)
   const location = useLocation()
   const navigate = useNavigate()
@@ -91,7 +91,7 @@ function Main({ user, getUser }) {
             </MainContext.Provider>
           </div>
           <div className='bottom'>
-            <NavFooter navList={navList} />
+            <NavFooter navList={navList} unReadCount={unReadCount} />
           </div>
         </div> : <Outlet />}
     </>
@@ -99,6 +99,6 @@ function Main({ user, getUser }) {
 }
 
 export default connect(
-  state => ({ user: state.user }),
+  state => ({ user: state.user, unReadCount: state.chat.unReadCount }),
   { getUser }
 )(Main)

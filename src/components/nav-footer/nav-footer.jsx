@@ -5,7 +5,7 @@ import {
     useLocation,
 } from 'react-router-dom'
 import PropTypes from 'prop-types'
-function NavFooter({ navList }) {
+function NavFooter({ navList, unReadCount }) {
 
     // const [tabs, setTabs] = useState([])
     const location = useLocation()
@@ -19,7 +19,14 @@ function NavFooter({ navList }) {
     return (
         <TabBar activeKey={pathname} onChange={value => setRouteActive(value)}>
             {tabs.map(item => (
-                <TabBar.Item key={item.path} icon={item.icon} title={item.title} />
+                <TabBar.Item
+                    key={item.path}
+                    icon={item.icon}
+                    title={item.title}
+                    badge={
+                        item.path === '/message' && unReadCount ? unReadCount : null
+                    }
+                />
             ))}
         </TabBar>
     )
@@ -27,5 +34,6 @@ function NavFooter({ navList }) {
 
 export default NavFooter
 NavFooter.propTypes = {
-    navList: PropTypes.array.isRequired
+    navList: PropTypes.array.isRequired,
+    unReadCount: PropTypes.number.isRequired
 }
